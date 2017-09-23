@@ -10,6 +10,7 @@ Every web-dev should have one or two of them on Github ~
 0. [](#0-)
 0. [](#0-)
 
+
 ## 01 create-react-app
 n the following tutorial we’ll use create-react-app to bootstrap our application. It’s an opinionated zero-configuration starter kit for React introduced by Facebook in 2016. We can install create-react-app by using npm:
 
@@ -129,6 +130,9 @@ render() {
 ```
 
 The app should automatically reload inside of your browser and display the basic bootstrap layout of our app, using the data from the todos-array.
+
+
+![](./todolist_01.png)
 
 
 ## 04 Add Remove TODO function
