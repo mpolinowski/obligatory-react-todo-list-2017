@@ -136,7 +136,10 @@ The app should automatically reload inside of your browser and display the basic
 Now we want to add a Delete function to the Delete button we added above. We do this, by adding an onClick event handler to the button:
 
 ```html
-<button className="btn btn-danger btn-sm" onClick={this.handleRemoveTodo.bind(this, index)}><span className="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</button>
+<button className="btn btn-danger btn-sm float-right" onClick={this.handleRemoveTodo.bind(this, index)}>
+  <span>
+    <i className="fa fa-trash-o" aria-hidden="true"></i>
+  </span>&nbsp;&nbsp; Delete</button>
 ```
 
 Then we have to define the handleRemoveTodo function inside src/App.js above the render method:
