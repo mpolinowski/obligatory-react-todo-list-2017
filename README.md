@@ -1,11 +1,13 @@
 # React-TODO-List
 Every web-dev should have one or two of them on Github ~
 
+Source [Medium](https://medium.com/codingthesmartway-com-blog/the-2017-react-development-starter-guide-f717e4e13de7)
+
 01. [create-react-app](#01-create-react-app)
 02. [Set Initial State](#02-set-initial-state)
 03. [JSX, Font-Awesome and Bootstrap](#03-jsx,-font-awesome-and-bootstrap)
 04. [Add Remove TODO function](#04-add-remove-todo-function)
-0. [](#0-)
+05. [Add a Add TODO function](#05-add-a-add-todo-function)
 0. [](#0-)
 0. [](#0-)
 0. [](#0-)
@@ -103,14 +105,14 @@ render() {
   return (
     <div className="container">
 
-        <nav className="navbar sticky-top navbar-dark bg-dark">
+        <nav className="navbar fixed-top navbar-dark bg-dark">
           <img src={logo} className="App-logo" alt="logo" />
           <h4 className="navbar-brand">
             Todo Count: <span className="badge badge-pill badge-primary">{this.state.todos.length}</span>
           </h4>
         </nav>
 
-        <div className="row">
+        <div className="row mt-5">
           <div className="col">
             <ul className="list-group">
               { this.state.todos.map((todo, index) =>
@@ -129,7 +131,7 @@ render() {
 }
 ```
 
-The app should automatically reload inside of your browser and display the basic bootstrap layout of our app, using the data from the todos-array.
+The app should automatically reload inside of your browser and display the basic bootstrap layout of our app, using the data from the todos-array:
 
 
 ![](./todolist_01.png)
@@ -146,7 +148,7 @@ Now we want to add a Delete function to the Delete button we added above. We do 
   </span>&nbsp;&nbsp; Delete</button>
 ```
 
-Then we have to define the handleRemoveTodo function inside src/App.js above the render method:
+Then we have to define the handleRemoveTodo function inside src/App.js above the render method of <App />:
 
 ```js
 handleRemoveTodo(index) {
@@ -159,17 +161,162 @@ handleRemoveTodo(index) {
 ```
 
 
+## 05 Add a Add TODO function
+
+For now we just want to add a method to add TODOs to our list - so we create a new function below <App /> called <TodoInput />
+
+```js
+class TodoInput extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      todoTitle: '',
+      todoResponsible: '',
+      todoDescription: '',
+      todoPriority: 'lowest'
+    }
+   }
+
+  render() {
+    return (
+      <div className="col">
+        <br/><br/><br/>
+        <h4>Add New Todo</h4><br/>
+        <form onSubmit={this.handleSubmit}>
+          <div className="form-group">
+            <input  name="todoTitle"
+                    type="text"
+                    className="form-control"
+                    id="inputTodoTitle"
+                    value={this.state.todoTitle}
+                    onChange={this.handleInputChange}
+                    aria-describedby="Todo Title"
+                    placeholder="Enter Title"></input>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputTodoPriority" className="control-label text-muted"><small>Priority</small></label>
+              <select   name="todoPriority"
+                        type="text"
+                        className="form-control"
+                        id="inputTodoPriority"
+                        value={this.state.todoPriority}
+                        onChange={this.handleInputChange}
+                        aria-describedby="Todo Priority">
+                <option>lowest</option>
+                <option>low</option>
+                <option>medium</option>
+                <option>high</option>
+                <option>emergency</option>
+              </select><br/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputTodoDescription" className="control-label text-muted"><small>Description</small></label>
+              <textarea   name="todoDescription"
+                          type="text"
+                          className="form-control"
+                          id="inputTodoDescription"
+                          value={this.state.todoDescription}
+                          onChange={this.handleInputChange}
+                          aria-describedby="Todo Description"></textarea>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputTodoResponsible" className="control-label text-muted"><small>Responsible</small></label>
+              <select   name="todoResponsible"
+                        type="text"
+                        className="form-control"
+                        id="inputTodoResponsible"
+                        value={this.state.todoResponsible}
+                        onChange={this.handleInputChange}
+                        aria-describedby="Todo Responsible">
+                <option>someone else</option>
+                <option>Mike Polinowski</option>
+                <option>Micro Aggressions</option>
+                <option>Vladimir Putin</option>
+                <option>Climate Change</option>
+              </select><br/>
+            </div>
+            <div className="form-group">
+              <button type="submit" className="btn btn-primary float-right">Add Todo</button>
+            </div>
+        </form>
+      </div>
+    )
+  }
+}
+```
+
+Now we have to define handleInputChange and handleSubmit above the render method:
+
+```js
+handleInputChange(event) {
+  const target = event.target;
+  const value = target.value;
+  const name = target.name;
+
+  this.setState({
+    [name]: value
+  })
+}
+
+handleSubmit(event) {
+  event.preventDefault();
+  this.props.onAddTodo(this.state);
+  this.setState({
+    todoTitle: '',
+    todoResponsible: '',
+    todoDescription: '',
+    todoPriority: 'lowest'
+  })
+}
+```
+
+And bind **this** to those functions inside the constructor - so we get access to the state of **todos**:
+
+```js
+constructor(props) {
+  super(props);
+
+  this.state = {
+    todoTitle: '',
+    todoResponsible: '',
+    todoDescription: '',
+    todoPriority: 'lowest'
+  }
+
+  this.handleInputChange = this.handleInputChange.bind(this);
+  this.handleSubmit = this.handleSubmit.bind(this);
+ }
+```
+
+Now we just need to pass down the state of todo via props in <App />:
+
+```js
+<TodoInput onAddTodo={this.handleAddTodo}/>
+```
 
 
+Define the handleAddTodo method above the render call:
 
 
+```js
+handleAddTodo(todo) {
+this.setState({todos: [...this.state.todos, todo]});
+```
 
 
+And bind **this** inside the constructor:
 
 
-
-
-
+```js
+constructor(props) {
+  super(props);
+  this.state = {
+    todos
+  };
+  this.handleAddTodo = this.handleAddTodo.bind(this);
+}
+```
 
 
 
